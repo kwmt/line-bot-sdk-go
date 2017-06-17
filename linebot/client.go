@@ -20,6 +20,7 @@ import (
 	"net/http"
 	"net/url"
 	"path"
+	"log"
 
 	"golang.org/x/net/context"
 	"golang.org/x/net/context/ctxhttp"
@@ -127,6 +128,7 @@ func (client *Client) post(ctx context.Context, endpoint string, body io.Reader)
 	if err != nil {
 		return nil, err
 	}
+	log.Println(req)
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	return client.do(ctx, req)
 }
