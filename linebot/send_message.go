@@ -76,7 +76,7 @@ func (call *PushMessageCall) Do() (*BasicResponse, error) {
 // ReplyMessage method
 func (client *Client) ReplyMessage(replyToken string, messages ...Message) *ReplyMessageCall {
 	return &ReplyMessageCall{
-		c:          client,
+		C:          client,
 		replyToken: replyToken,
 		messages:   messages,
 	}
@@ -84,7 +84,7 @@ func (client *Client) ReplyMessage(replyToken string, messages ...Message) *Repl
 
 // ReplyMessageCall type
 type ReplyMessageCall struct {
-	c   *Client
+	C   *Client
 	ctx context.Context
 
 	replyToken string
@@ -114,7 +114,7 @@ func (call *ReplyMessageCall) Do() (*BasicResponse, error) {
 	if err := call.encodeJSON(&buf); err != nil {
 		return nil, err
 	}
-	res, err := call.c.post(call.ctx, APIEndpointReplyMessage, &buf)
+	res, err := call.C.post(call.ctx, APIEndpointReplyMessage, &buf)
 	if res != nil && res.Body != nil {
 		defer res.Body.Close()
 	}

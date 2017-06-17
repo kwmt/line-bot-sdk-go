@@ -25,7 +25,7 @@ import (
 
 // ParseRequest method
 func (client *Client) ParseRequest(r *http.Request) ([]*Event, error) {
-	return ParseRequest(client.channelSecret, r)
+	return ParseRequest(client.ChannelSecret, r)
 }
 
 // ParseRequest func

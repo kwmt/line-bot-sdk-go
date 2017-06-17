@@ -40,10 +40,10 @@ const (
 
 // Client type
 type Client struct {
-	channelSecret string
-	channelToken  string
-	endpointBase  *url.URL     // default APIEndpointBase
-	httpClient    *http.Client // default http.DefaultClient
+	ChannelSecret string
+	ChannelToken  string
+	EndpointBase  *url.URL     // default APIEndpointBase
+	HttpClient    *http.Client // default http.DefaultClient
 }
 
 // ClientOption type
@@ -58,9 +58,9 @@ func New(channelSecret, channelToken string, options ...ClientOption) (*Client, 
 		return nil, errors.New("missing channel access token")
 	}
 	c := &Client{
-		channelSecret: channelSecret,
-		channelToken:  channelToken,
-		httpClient:    http.DefaultClient,
+		ChannelSecret: channelSecret,
+		ChannelToken:  channelToken,
+		HttpClient:    http.DefaultClient,
 	}
 	for _, option := range options {
 		err := option(c)
@@ -68,12 +68,12 @@ func New(channelSecret, channelToken string, options ...ClientOption) (*Client, 
 			return nil, err
 		}
 	}
-	if c.endpointBase == nil {
+	if c.EndpointBase == nil {
 		u, err := url.ParseRequestURI(APIEndpointBase)
 		if err != nil {
 			return nil, err
 		}
-		c.endpointBase = u
+		c.EndpointBase = u
 	}
 	return c, nil
 }
@@ -81,7 +81,7 @@ func New(channelSecret, channelToken string, options ...ClientOption) (*Client, 
 // WithHTTPClient function
 func WithHTTPClient(c *http.Client) ClientOption {
 	return func(client *Client) error {
-		client.httpClient = c
+		client.HttpClient = c
 		return nil
 	}
 }
@@ -93,24 +93,24 @@ func WithEndpointBase(endpointBase string) ClientOption {
 		if err != nil {
 			return err
 		}
-		client.endpointBase = u
+		client.EndpointBase = u
 		return nil
 	}
 }
 
 func (client *Client) url(endpoint string) string {
-	u := *client.endpointBase
+	u := *client.EndpointBase
 	u.Path = path.Join(u.Path, endpoint)
 	return u.String()
 }
 
 func (client *Client) do(ctx context.Context, req *http.Request) (*http.Response, error) {
-	req.Header.Set("Authorization", "Bearer "+client.channelToken)
+	req.Header.Set("Authorization", "Bearer "+client.ChannelToken)
 	req.Header.Set("User-Agent", "LINE-BotSDK-Go/"+version)
 	if ctx != nil {
-		return ctxhttp.Do(ctx, client.httpClient, req)
+		return ctxhttp.Do(ctx, client.HttpClient, req)
 	}
-	return client.httpClient.Do(req)
+	return client.HttpClient.Do(req)
 
 }
 

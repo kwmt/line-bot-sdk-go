@@ -47,20 +47,21 @@ func TestNewClient(t *testing.T) {
 	token := "testtoken"
 	wantURL, _ := url.Parse(APIEndpointBase)
 	client, err := New(secret, token)
+	client.ChannelToken  = ""
 	if err != nil {
 		t.Fatal(err)
 	}
-	if client.channelSecret != secret {
-		t.Errorf("channelSecret %s; want %s", client.channelSecret, secret)
+	if client.ChannelSecret != secret {
+		t.Errorf("channelSecret %s; want %s", client.ChannelSecret, secret)
 	}
-	if client.channelToken != token {
-		t.Errorf("channelToken %s; want %s", client.channelSecret, secret)
+	if client.ChannelToken != token {
+		t.Errorf("channelToken %s; want %s", client.ChannelSecret, secret)
 	}
-	if !reflect.DeepEqual(client.endpointBase, wantURL) {
-		t.Errorf("endpointBase %q; want %q", client.endpointBase, wantURL)
+	if !reflect.DeepEqual(client.EndpointBase, wantURL) {
+		t.Errorf("endpointBase %q; want %q", client.EndpointBase, wantURL)
 	}
-	if client.httpClient != http.DefaultClient {
-		t.Errorf("httpClient %p; want %p", client.httpClient, http.DefaultClient)
+	if client.HttpClient != http.DefaultClient {
+		t.Errorf("httpClient %p; want %p", client.HttpClient, http.DefaultClient)
 	}
 }
 
@@ -79,10 +80,10 @@ func TestNewClientWithOptions(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !reflect.DeepEqual(client.endpointBase, wantURL) {
-		t.Errorf("endpointBase %q; want %q", client.endpointBase, wantURL)
+	if !reflect.DeepEqual(client.EndpointBase, wantURL) {
+		t.Errorf("endpointBase %q; want %q", client.EndpointBase, wantURL)
 	}
-	if client.httpClient != &httpClient {
-		t.Errorf("httpClient %p; want %p", client.httpClient, &httpClient)
+	if client.HttpClient != &httpClient {
+		t.Errorf("httpClient %p; want %p", client.HttpClient, &httpClient)
 	}
 }
